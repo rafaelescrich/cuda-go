@@ -1,31 +1,32 @@
-# Cuda Sample
+# Cuda Go
 
 ## Go Sample program (to check Cuda bindings)
 
 ```go
 package main
 import(
-	"github.com/barnex/cuda5/cu"
-	_ "github.com/mumax/3/cuda"
-	"fmt"
-	"C"
-	"strconv"
+  cu "github.com/rafaelescrich/3/cuda"
+  "fmt"
+  "C"
+  "strconv"
 )
 
 func main(){
-	cu.Init(0);
-	fmt.Println("Hello, I am you GPU:", cu.Device(0).Name())
-	fmt.Println("Number of devices: " + strconv.Itoa(cu.DeviceGetCount()))
-	fmt.Println("Free memory: " + strconv.FormatInt(cu.DeviceGet(0).TotalMem(),10))
+  cu.Init(0);
+  fmt.Println("Hello, I am you GPU:", cu.Device(0).Name())
+  fmt.Println("Number of devices: " + strconv.Itoa(cu.DeviceGetCount()))
+  fmt.Println("Free memory: " + strconv.FormatInt(cu.DeviceGet(0).TotalMem(),10))
 }
 ```
 
 Response message:
-```
-/usr/local/go/bin/go run (...)/src/github.com/miguelzambrana/cudagolabs/cudaHello.go
-Hello, I am you GPU: GeForce GTX 960
+
+```bash
+$ ./cuda-go
+ello, I am your GPU: GeForce 940MX
+Devices clock rate is:  1189000
 Number of devices: 1
-Free memory: 4227072000
+Free memory: 4242604032
 ```
 
 ## Go Bindings from Mumax Cu
@@ -34,8 +35,7 @@ Free memory: 4227072000
 
 ## Go Dependencies
 
-- go get github.com/barnex/cuda5/cu
-- go get githun.com/mumax/3
+- go get githun.com/rafaelescrich/3
 
 ## Server preinstall
 
@@ -58,43 +58,33 @@ $ sudo apt-get install \
 
 Install Nvidia latest drivers
 
-```text
-$ sudo apt-get purge nvidia-*
-$ sudo add-apt-repository ppa:graphics-drivers/ppa
-$ sudo apt-get update
-$ sudo apt-get install nvidia-367
-```
-
-Force GCC 4.9 (Optional)
-
-```text
-$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10
-$ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 20
-
-$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10
-$ sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 20
+```bash
+sudo apt-get purge nvidia-*
+sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt-get update
+sudo apt-get install nvidia-367
 ```
 
 Install last CUDA Platform for Ubuntu
 
-```text
-$ curl -O https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda-repo-ubuntu1604-8-0-local_8.0.44-1_amd64-deb
-$ sudo dpkg -i cuda-repo-ubuntu1604-8-0-local_8.0.44-1_amd64.deb
-$ sudo apt-get update
-$ sudo apt-get install cuda
+```bash
+curl -O https://developer.nvidia.com/compute/cuda/8.0/prod/local_installers/cuda-repo-ubuntu1604-8-0-local_8.0.44-1_amd64-deb
+sudo dpkg -i cuda-repo-ubuntu1604-8-0-local_8.0.44-1_amd64.deb
+sudo apt-get update
+sudo apt-get install cuda
 ```
 
 Prepare CUDA environment
 
-```text
-$ echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
-$ echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
-$ source ~/.bashrc
+```bash
+echo 'export PATH=/usr/local/cuda/bin:$PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 Check the CUDA version
 
-```text
+```bash
 $ nvcc --version
 
 nvcc: NVIDIA (R) Cuda compiler driver
@@ -105,19 +95,19 @@ Cuda compilation tools, release 8.0, V8.0.44
 
 (Optional) ModernGPU Repository [in order to check CUDA lib]
 
-```text
-$ git clone https://github.com/moderngpu/moderngpu.git
+```bash
+git clone https://github.com/moderngpu/moderngpu.git
 $ cd moderngpu
 $ make
 ```
 
 Some Cuda program sample
 
-```text
-$ vi hello.cu
+```bash
+vi hello.cu
 ```
 
-```cuda 
+```cuda
 #include <moderngpu/transform.hxx>
 
 using namespace mgpu;
@@ -139,8 +129,8 @@ int main(int argc, char** argv) {
 }
 ```
 
-```text
-$ nvcc \
+```bash
+nvcc \
       -std=c++11 \
       --expt-extended-lambda \
       -gencode arch=compute_61,code=compute_61 \
@@ -149,7 +139,7 @@ $ nvcc \
       hello.cu
 ```
 
-```text
+```bash
 $ ./hello
 
 GeForce GTX 1080 : 1835.000 Mhz   (Ordinal 0)
