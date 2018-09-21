@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	cu "github.com/mumax/3/cuda/cu"
+	cu "github.com/rafaelescrich/3/cuda/cu"
 )
 
 func main() {

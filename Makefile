@@ -1,4 +1,4 @@
-APP_NAME=cuda-hello
+APP_NAME=cuda-go
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
