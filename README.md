@@ -35,7 +35,7 @@ Free memory: 4242604032
 
 ## Go Dependencies
 
-- go get githun.com/rafaelescrich/3
+- go get github.com/rafaelescrich/3
 
 ## Server preinstall
 

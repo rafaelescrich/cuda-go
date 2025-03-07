@@ -1,27 +1,38 @@
-APP_NAME=cuda-go
-# Go parameters
-GOCMD=go
-GOBUILD=$(GOCMD) build
-GOCLEAN=$(GOCMD) clean
-GOTEST=$(GOCMD) test
-GOGET=$(GOCMD) get
-BINARY_NAME=$(APP_NAME)
+APP_NAME       = cuda-go
+PTX_SRC        = matmul.cu
+PTX_FILE       = matmul.ptx
 
-all: clean deps test build
+GOCMD          = go
+GOBUILD        = $(GOCMD) build
+GOCLEAN        = $(GOCMD) clean
+GOTEST         = $(GOCMD) test
+GOGET          = $(GOCMD) get
+BINARY_NAME    = $(APP_NAME)
 
-build: 
+# Default target
+all: clean deps test ptx build
+
+# Compile CUDA source to PTX
+ptx:
+	nvcc -arch=sm_61 --ptx $(PTX_SRC) -o $(PTX_FILE)
+
+# Build the Go binary
+build:
 	$(GOBUILD) -o $(BINARY_NAME) -v
 
-
-test: 
+# Run tests
+test:
 	$(GOTEST) -v ./...
 
-clean: 
+# Clean up
+clean:
 	$(GOCLEAN)
-	rm -f $(BINARY_NAME)*
+	rm -f $(BINARY_NAME) $(PTX_FILE)
 
-run: build
-	env $$(grep -v '^#' $(ENV_FILE) | xargs) ./$(BINARY_NAME)
-
+# Fetch dependencies
 deps:
 	$(GOGET) ./...
+
+# Local run (assuming you have an ENV_FILE or you don't need env)
+run: build
+	./$(BINARY_NAME)
